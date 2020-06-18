@@ -15,13 +15,43 @@ const styles = (theme) => ({
         marginTop: theme.spacing(1),
         fontWeight: 400,
     },
-
+    menuItem: {
+        color: theme.palette.getContrastText(theme.palette.background.paper),
+    },
 });
 
 const SelectAppPanel = (props) => {
-    const {
-        subscriptions, handleChanges, selectedApplication, selectedKeyType, classes,
+    let {
+        selectedApplication, selectedKeyType, selectedKeyManager,
     } = props;
+
+    const {
+        subscriptions, handleChanges, classes, keyManagers,
+    } = props;
+
+    /**
+     * This method is used to handle the updating of key generation
+     * request object.
+     * @param {*} event event fired
+     */
+    const handleSelectPanelChange = (event) => {
+        const { target } = event;
+        const { name, value } = target;
+        switch (name) {
+            case 'selectedApplication':
+                selectedApplication = value;
+                break;
+            case 'selectedKeyManager':
+                selectedKeyManager = value;
+                break;
+            case 'selectedKeyType':
+                selectedKeyType = value;
+                break;
+            default:
+                break;
+        }
+        handleChanges(event);
+    };
     return (
         <>
             <Grid x={12} md={6} className={classes.centerItems}>
@@ -37,7 +67,7 @@ const SelectAppPanel = (props) => {
                     )}
                     value={selectedApplication}
                     name='selectedApplication'
-                    onChange={handleChanges}
+                    onChange={handleSelectPanelChange}
                     SelectProps={subscriptions}
                     helperText={(
                         <FormattedMessage
@@ -49,8 +79,47 @@ const SelectAppPanel = (props) => {
                     variant='outlined'
                 >
                     {subscriptions.map((sub) => (
-                        <MenuItem value={sub.applicationInfo.applicationId} key={sub.applicationInfo.applicationId}>
+                        <MenuItem
+                            value={sub.applicationInfo.applicationId}
+                            key={sub.applicationInfo.applicationId}
+                            className={classes.menuItem}
+                        >
                             {sub.applicationInfo.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
+            </Grid>
+            <Grid x={12} md={6} className={classes.centerItems}>
+                <TextField
+                    fullWidth
+                    id='outlined-select-currency'
+                    select
+                    label={(
+                        <FormattedMessage
+                            defaultMessage='Key Managers'
+                            id='Apis.Details.ApiConsole.SelectAppPanel.keyManagers'
+                        />
+                    )}
+                    value={selectedKeyManager}
+                    name='selectedKeyManager'
+                    onChange={handleSelectPanelChange}
+                    SelectProps={keyManagers}
+                    helperText={(
+                        <FormattedMessage
+                            defaultMessage='Registered Key Managers'
+                            id='Apis.Details.ApiConsole.SelectAppPanel.select.registered.keyManagers'
+                        />
+                    )}
+                    margin='normal'
+                    variant='outlined'
+                >
+                    {keyManagers.map((keyManager) => (
+                        <MenuItem
+                            value={keyManager.name}
+                            key={keyManager.name}
+                            className={classes.menuItem}
+                        >
+                            {keyManager.name}
                         </MenuItem>
                     ))}
                 </TextField>
@@ -66,7 +135,7 @@ const SelectAppPanel = (props) => {
                     <RadioGroup
                         name='selectedKeyType'
                         value={selectedKeyType}
-                        onChange={handleChanges}
+                        onChange={handleSelectPanelChange}
                         row
                     >
                         {(subscriptions != null && subscriptions.find((sub) => sub.applicationId

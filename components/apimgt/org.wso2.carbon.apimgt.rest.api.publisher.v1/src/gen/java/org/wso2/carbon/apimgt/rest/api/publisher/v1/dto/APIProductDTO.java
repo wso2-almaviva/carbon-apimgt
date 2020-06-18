@@ -9,8 +9,8 @@ import java.util.Map;
 import org.wso2.carbon.apimgt.rest.api.publisher.v1.dto.APICorsConfigurationDTO;
 import org.wso2.carbon.apimgt.rest.api.publisher.v1.dto.APIMonetizationInfoDTO;
 import org.wso2.carbon.apimgt.rest.api.publisher.v1.dto.APIProductBusinessInformationDTO;
+import org.wso2.carbon.apimgt.rest.api.publisher.v1.dto.APIScopeDTO;
 import org.wso2.carbon.apimgt.rest.api.publisher.v1.dto.ProductAPIDTO;
-import org.wso2.carbon.apimgt.rest.api.publisher.v1.dto.ScopeDTO;
 import javax.validation.constraints.*;
 
 
@@ -65,6 +65,7 @@ public enum StateEnum {
 
     private StateEnum state = null;
     private Boolean enableSchemaValidation = null;
+    private Boolean enableStore = null;
     private Boolean responseCachingEnabled = null;
     private Integer cacheTimeout = null;
 
@@ -151,7 +152,7 @@ public enum AccessControlEnum {
 @XmlEnum(String.class)
 public enum SubscriptionAvailabilityEnum {
 
-    @XmlEnumValue("current_tenant") CURRENT_TENANT(String.valueOf("current_tenant")), @XmlEnumValue("all_tenants") ALL_TENANTS(String.valueOf("all_tenants")), @XmlEnumValue("specific_tenants") SPECIFIC_TENANTS(String.valueOf("specific_tenants"));
+    @XmlEnumValue("CURRENT_TENANT") CURRENT_TENANT(String.valueOf("CURRENT_TENANT")), @XmlEnumValue("ALL_TENANTS") ALL_TENANTS(String.valueOf("ALL_TENANTS")), @XmlEnumValue("SPECIFIC_TENANTS") SPECIFIC_TENANTS(String.valueOf("SPECIFIC_TENANTS"));
 
 
     private String value;
@@ -189,7 +190,7 @@ public enum SubscriptionAvailabilityEnum {
     private String createdTime = null;
     private String lastUpdatedTime = null;
     private List<ProductAPIDTO> apis = new ArrayList<>();
-    private List<ScopeDTO> scopes = new ArrayList<>();
+    private List<APIScopeDTO> scopes = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
 
   /**
@@ -332,6 +333,23 @@ public enum SubscriptionAvailabilityEnum {
   }
   public void setEnableSchemaValidation(Boolean enableSchemaValidation) {
     this.enableSchemaValidation = enableSchemaValidation;
+  }
+
+  /**
+   **/
+  public APIProductDTO enableStore(Boolean enableStore) {
+    this.enableStore = enableStore;
+    return this;
+  }
+
+  
+  @ApiModelProperty(example = "true", value = "")
+  @JsonProperty("enableStore")
+  public Boolean isEnableStore() {
+    return enableStore;
+  }
+  public void setEnableStore(Boolean enableStore) {
+    this.enableStore = enableStore;
   }
 
   /**
@@ -600,7 +618,7 @@ public enum SubscriptionAvailabilityEnum {
   }
 
   /**
-   * The subscription availability. Accepts one of the following. current_tenant, all_tenants or specific_tenants.
+   * The subscription availability. Accepts one of the following. CURRENT_TENANT, ALL_TENANTS or SPECIFIC_TENANTS.
    **/
   public APIProductDTO subscriptionAvailability(SubscriptionAvailabilityEnum subscriptionAvailability) {
     this.subscriptionAvailability = subscriptionAvailability;
@@ -608,7 +626,7 @@ public enum SubscriptionAvailabilityEnum {
   }
 
   
-  @ApiModelProperty(example = "current_tenant", value = "The subscription availability. Accepts one of the following. current_tenant, all_tenants or specific_tenants.")
+  @ApiModelProperty(example = "CURRENT_TENANT", value = "The subscription availability. Accepts one of the following. CURRENT_TENANT, ALL_TENANTS or SPECIFIC_TENANTS.")
   @JsonProperty("subscriptionAvailability")
   public SubscriptionAvailabilityEnum getSubscriptionAvailability() {
     return subscriptionAvailability;
@@ -757,7 +775,7 @@ public enum SubscriptionAvailabilityEnum {
 
   /**
    **/
-  public APIProductDTO scopes(List<ScopeDTO> scopes) {
+  public APIProductDTO scopes(List<APIScopeDTO> scopes) {
     this.scopes = scopes;
     return this;
   }
@@ -765,10 +783,10 @@ public enum SubscriptionAvailabilityEnum {
   
   @ApiModelProperty(value = "")
   @JsonProperty("scopes")
-  public List<ScopeDTO> getScopes() {
+  public List<APIScopeDTO> getScopes() {
     return scopes;
   }
-  public void setScopes(List<ScopeDTO> scopes) {
+  public void setScopes(List<APIScopeDTO> scopes) {
     this.scopes = scopes;
   }
 
@@ -808,6 +826,7 @@ public enum SubscriptionAvailabilityEnum {
         Objects.equals(hasThumbnail, apIProduct.hasThumbnail) &&
         Objects.equals(state, apIProduct.state) &&
         Objects.equals(enableSchemaValidation, apIProduct.enableSchemaValidation) &&
+        Objects.equals(enableStore, apIProduct.enableStore) &&
         Objects.equals(responseCachingEnabled, apIProduct.responseCachingEnabled) &&
         Objects.equals(cacheTimeout, apIProduct.cacheTimeout) &&
         Objects.equals(visibility, apIProduct.visibility) &&
@@ -838,7 +857,7 @@ public enum SubscriptionAvailabilityEnum {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, context, description, provider, hasThumbnail, state, enableSchemaValidation, responseCachingEnabled, cacheTimeout, visibility, visibleRoles, visibleTenants, accessControl, accessControlRoles, gatewayEnvironments, apiType, transport, tags, policies, apiThrottlingPolicy, authorizationHeader, securityScheme, subscriptionAvailability, subscriptionAvailableTenants, additionalProperties, monetization, businessInformation, corsConfiguration, createdTime, lastUpdatedTime, apis, scopes, categories);
+    return Objects.hash(id, name, context, description, provider, hasThumbnail, state, enableSchemaValidation, enableStore, responseCachingEnabled, cacheTimeout, visibility, visibleRoles, visibleTenants, accessControl, accessControlRoles, gatewayEnvironments, apiType, transport, tags, policies, apiThrottlingPolicy, authorizationHeader, securityScheme, subscriptionAvailability, subscriptionAvailableTenants, additionalProperties, monetization, businessInformation, corsConfiguration, createdTime, lastUpdatedTime, apis, scopes, categories);
   }
 
   @Override
@@ -854,6 +873,7 @@ public enum SubscriptionAvailabilityEnum {
     sb.append("    hasThumbnail: ").append(toIndentedString(hasThumbnail)).append("\n");
     sb.append("    state: ").append(toIndentedString(state)).append("\n");
     sb.append("    enableSchemaValidation: ").append(toIndentedString(enableSchemaValidation)).append("\n");
+    sb.append("    enableStore: ").append(toIndentedString(enableStore)).append("\n");
     sb.append("    responseCachingEnabled: ").append(toIndentedString(responseCachingEnabled)).append("\n");
     sb.append("    cacheTimeout: ").append(toIndentedString(cacheTimeout)).append("\n");
     sb.append("    visibility: ").append(toIndentedString(visibility)).append("\n");
